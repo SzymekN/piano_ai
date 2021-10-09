@@ -8,10 +8,14 @@ from ctypes import windll
 
 def click(pos):
     # click at given position
-    win32api.SetCursorPos((pos[0],pos[1]))
-    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,0,0)
-    time.sleep(0.001) #This pauses the script for 0.1 seconds
-    win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,0,0)
+    if last_pos != pos:
+        win32api.SetCursorPos((pos[0],pos[1]))
+        win32api.mouse_event(win32con.MOUSEEVENTF_LEFTDOWN,0,0)
+        time.sleep(0.001) #This pauses the script for 0.1 seconds
+        win32api.mouse_event(win32con.MOUSEEVENTF_LEFTUP,0,0)
+        return pos
+    return last_pos
+
 
 def calibration():
     # calibrete where are tiles 
@@ -32,10 +36,11 @@ def get_pixel(pos):
 
 
 # default tiles positions
-pos_1 = (970,500)
-pos_2 = (1130,500)
-pos_3 = (1300,500)
-pos_4 = (1455,500)
+pos_1 = (410,400)
+pos_2 = (467,400)
+pos_3 = (538,400)
+pos_4 = (600,400)
+last_pos = (0,0)
 
 # calibrate tiles position or use defaults
 choice = input("Calibrate?")
@@ -73,28 +78,28 @@ while keyboard.is_pressed('q') == False:
             tile_1 = get_pixel(pos_1)
             color_1 = int(bin(tile_1)[-8:], 2) 
             if color_1 <20:
-                click(pos_1)
-                # print("1")
+                last_pos = click(pos_1)
+                #print("1")
             else:
                 tile_2 = get_pixel(pos_2)
                 color_2 = int(bin(tile_2)[-8:], 2) 
                 if color_2 <20:
-                    click(pos_2)
-                    # print("2")
+                    last_pos = click(pos_2)
+                    #print("2")
                 else:
                     tile_3 = get_pixel(pos_3)
                     color_3 = int(bin(tile_3)[-8:], 2) 
                     if color_3 <20:
-                        click(pos_3)
-                        # print("3")
+                        last_pos = click(pos_3)
+                        #print("3")
                     else:
                         tile_4 = get_pixel(pos_4)
                         color_4 = int(bin(tile_4)[-8:], 2) 
                         if color_4 <20:
-                            click(pos_4)
-                            # print("4")
+                            last_pos = click(pos_4)
+                            #print("4")
                         # else:
-                            # print("none")
+                            #print("none")
 
             end = time.time()
             print(end-start)
