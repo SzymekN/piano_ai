@@ -42,12 +42,14 @@ pos_3 = (538,400)
 pos_4 = (600,400)
 last_pos = (0,0)
 
+# handle to computer display
+dc = windll.user32.GetDC(0)
+
 # calibrate tiles position or use defaults
 choice = input("Calibrate?")
 if choice == 'y':
     print("Click on tile 1")
     pos_1 = calibration()
-    print(pos_1[0])
     print("Click on tile 2")
     pos_2 = calibration()
     print("Click on tile 3")
@@ -57,9 +59,9 @@ if choice == 'y':
     print("Calibrated")
     
 
-dc = windll.user32.GetDC(0)
 
 print("click to start, q to break loop")
+
 # get the state of left mouse button
 state_left = win32api.GetKeyState(0x01)
 time.sleep(0.1)
@@ -74,32 +76,26 @@ while keyboard.is_pressed('q') == False:
         while keyboard.is_pressed('q') == False: 
             start = time.time()
 
-            # niefortunnie za wolno
+            # Check tiles pixels on each tile, go to other tile if black pixel not found
             tile_1 = get_pixel(pos_1)
             color_1 = int(bin(tile_1)[-8:], 2) 
             if color_1 <20:
                 last_pos = click(pos_1)
-                #print("1")
             else:
                 tile_2 = get_pixel(pos_2)
                 color_2 = int(bin(tile_2)[-8:], 2) 
                 if color_2 <20:
                     last_pos = click(pos_2)
-                    #print("2")
                 else:
                     tile_3 = get_pixel(pos_3)
                     color_3 = int(bin(tile_3)[-8:], 2) 
                     if color_3 <20:
                         last_pos = click(pos_3)
-                        #print("3")
                     else:
                         tile_4 = get_pixel(pos_4)
                         color_4 = int(bin(tile_4)[-8:], 2) 
                         if color_4 <20:
                             last_pos = click(pos_4)
-                            #print("4")
-                        # else:
-                            #print("none")
 
             end = time.time()
             print(end-start)
